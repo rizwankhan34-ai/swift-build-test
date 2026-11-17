@@ -8,15 +8,18 @@ jobs:
       - name: Setup Remote Access
         run: |
           brew install tailscale
-          brew install --cask nomachine
           sudo brew services start tailscale
           sleep 5
           sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh
-          sudo sysadminctl -resetPasswordFor runner -newPassword "${{ secrets.VNC_USER_PASSWORD }}" || echo "runner:${{ secrets.VNC_USER_PASSWORD }}" | sudo chpasswd
+          curl -L "https://nomachine.com" -o nomachine.dmg
+          hdiutil attach nomachine.dmg -nobrowse -mountpoint /Volumes/NoMachine
+          sudo installer -pkg /Volumes/NoMachine/NoMachine.pkg -target /
+          hdiutil detach /Volumes/NoMachine
           sudo /etc/NX/nxserver --startup
           echo "YOUR CLOUD MAC IP ADDRESS IS:"
           tailscale ip -4
           sleep 21000
+
 
 
 
