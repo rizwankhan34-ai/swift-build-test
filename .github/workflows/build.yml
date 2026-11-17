@@ -11,12 +11,13 @@ jobs:
           sudo brew services start tailscale
           sleep 5
           sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh
-          sed -i '' 's/sha256 .*/sha256 :no_check/' $(brew --caskroom)/../Taps/homebrew/homebrew-cask/Casks/n/nomachine.rb || true
-          HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask nomachine || true
+          brew update
+          brew install --cask nomachine
           sudo /etc/NX/nxserver --startup
           echo "YOUR CLOUD MAC IP ADDRESS IS:"
           tailscale ip -4
           sleep 21000
+
 
 
 
