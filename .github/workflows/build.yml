@@ -11,12 +11,20 @@ jobs:
           sudo brew services start tailscale
           sleep 5
           sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh
-          brew update
-          brew install --cask nomachine
+          CASK_FILE=$(find $(brew --repository) -name "nomachine.rb" | head -n 1)
+          sed -i '' 's/sha256 .*/sha256 :no_check/' "$CASK_FILE"
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install --cask nomachine
+          mkdir -p ~/.nx/config
+          ssh-keygen -t rsa -b 2048 -f ~/.nx/config/id_rsa -N ""
+          mkdir -p ~/.ssh && cat ~/.nx/config/id_rsa.pub >> ~/.ssh/authorized_keys
+          chmod 700 ~/.ssh && chmod 600 ~/.ssh/authorized_keys
           sudo /etc/NX/nxserver --startup
+          echo "=== COPY THIS PRIVATE KEY FOR NOMACHINE ==="
+          cat ~/.nx/config/id_rsa
           echo "YOUR CLOUD MAC IP ADDRESS IS:"
           tailscale ip -4
           sleep 21000
+
 
 
 
