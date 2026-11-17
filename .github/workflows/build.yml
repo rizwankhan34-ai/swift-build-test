@@ -7,10 +7,12 @@ jobs:
     steps:
       - name: Setup Remote Access
         run: |
-          brew install --cask ngrok
-          ngrok config add-authtoken ${{ secrets.NGROK_AUTH_TOKEN }}
+          brew install tailscale
+          sudo brew services start tailscale
+          sleep 5
+          sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes -clientopts -setvncpw -vncpw "${{ secrets.VNC_PASSWORD }}" -restart -agent -privs -all
-          ngrok tcp 5900 --log=stdout &
-          sleep 10
-          curl -s http://localhost:4040/api/tunnels | grep -o 'tcp://[^"]*'
+          echo "YOUR CLOUD MAC IP ADDRESS IS:"
+          tailscale ip -4
           sleep 21000
+
