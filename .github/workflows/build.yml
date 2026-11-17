@@ -1,0 +1,7 @@
+echo "# swift-build-test" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/rizwankhan34-ai/swift-build-test.git
+git push -u origin main
