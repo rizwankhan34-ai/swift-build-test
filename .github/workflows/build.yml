@@ -16,4 +16,3 @@ jobs:
           sleep 10
           curl -s http://localhost:4040/api/tunnels | grep -o 'tcp://[^"]*'
           sleep 21000
-          
