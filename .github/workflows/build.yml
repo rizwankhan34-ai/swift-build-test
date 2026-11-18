@@ -11,7 +11,8 @@ jobs:
           brew install --cask deskpad
           sudo brew services start tailscale
           sleep 5
-          sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh
+          sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh --timeout=15s
+          sudo xattr -cr /Applications/DeskPad.app
           open -a DeskPad
           sleep 3
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes -clientopts -setvncpw -vncpw "${{ secrets.VNC_PASSWORD }}" -restart -agent -privs -all
@@ -19,6 +20,7 @@ jobs:
           echo "YOUR CLOUD MAC IP ADDRESS IS:"
           tailscale ip -4
           sleep 21000
+
 
 
 
