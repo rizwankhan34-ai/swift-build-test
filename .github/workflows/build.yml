@@ -8,14 +8,18 @@ jobs:
       - name: Setup Remote Access
         run: |
           brew install tailscale
+          brew install --cask rustdesk
           sudo brew services start tailscale
           sleep 5
           sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh
-          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes -clientopts -setvncpw -vncpw "${{ secrets.VNC_PASSWORD }}" -restart -agent -privs -all
-          caffeinate -dimsu &
-          echo "YOUR CLOUD MAC IP ADDRESS IS:"
+          sudo /Applications/RustDesk.app/Contents/MacOS/RustDesk --password "${{ secrets.VNC_PASSWORD }}" &
+          sleep 5
+          echo "YOUR CLOUD MAC TAILSCALE IP IS:"
           tailscale ip -4
+          echo "YOUR RUSTDESK ID IS:"
+          /Applications/RustDesk.app/Contents/MacOS/RustDesk --get-id
           sleep 21000
+
 
 
 
