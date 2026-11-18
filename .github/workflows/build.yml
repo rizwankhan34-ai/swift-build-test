@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-15
     steps:
       - name: Setup Remote Access
         run: |
@@ -12,8 +12,8 @@ jobs:
           sleep 5
           sudo tailscale up --authkey=${{ secrets.NGROK_AUTH_TOKEN }} --ssh
           sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes -clientopts -setvncpw -vncpw "${{ secrets.VNC_PASSWORD }}" -restart -agent -privs -all
+          sudo launchctl load -w /System/Library/LaunchDaemons/com.apple.screensharing.plist || true
           caffeinate -u -t 21000 &
-          osascript -e 'tell application "System Events" to keystroke return' || true
           echo "YOUR CLOUD MAC IP ADDRESS IS:"
           tailscale ip -4
           sleep 21000
