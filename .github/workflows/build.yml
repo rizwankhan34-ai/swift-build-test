@@ -3,7 +3,7 @@ on: workflow_dispatch
 
 jobs:
   build:
-    runs-on: macos-15-intel
+    runs-on: macos-26
     steps:
       - name: Setup Remote Access
         run: |
