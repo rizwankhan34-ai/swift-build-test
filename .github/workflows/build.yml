@@ -15,11 +15,13 @@ jobs:
           sudo xattr -cr /Applications/DeskPad.app
           open -a DeskPad
           sleep 3
-          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -clientopts -setvnclegacy -vnclegacy yes -clientopts -setvncpw -vncpw "${{ secrets.VNC_PASSWORD }}" -restart -agent -privs -all
+          echo "runner:${{ secrets.VNC_USER_PASSWORD }}" | sudo chpasswd
+          sudo /System/Library/CoreServices/RemoteManagement/ARDAgent.app/Contents/Resources/kickstart -activate -configure -access -on -users runner -privs -all -restart -agent
           caffeinate -dimsu &
           echo "YOUR CLOUD MAC IP ADDRESS IS:"
           tailscale ip -4
           sleep 21000
+
 
 
 
